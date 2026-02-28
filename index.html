@@ -1,8 +1,6 @@
  <!DOCTYPE html>
-
 <html lang="en">
  <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daydream | Open Spotify</title>
@@ -28,37 +26,83 @@
       line-height: 1.5;
     }
 
-    a {
+    a,
+    button {
       color: #1db954;
+      font: inherit;
+    }
+
+    button {
+      margin-top: 12px;
+      border: 1px solid #1db954;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    small {
+      display: block;
+      margin-top: 12px;
+      color: #b3b3b3;
     }
   </style>
  </head>
  <body>
   <main>
-    <h1>Redirecting to Spotify…</h1>
-    <p>If the app does not open automatically, use this link:</p>
-    <p>
-      <a href="https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz">Open track on Spotify</a>
-    </p>
+    <h1>Opening Spotify…</h1>
+    <p>If the app does not open automatically, tap below:</p>
+    <p><a id="spotify-link" href="https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz">Open track on Spotify</a></p>
+    <button id="open-app" type="button">Open in Spotify app</button>
+    <small>Tab auto-close depends on browser security rules and may be blocked.</small>
   </main>
 
   <script>
-    const spotifyWebUrl = "https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz";
-    const spotifyAppUri = "spotify:track:4spyMABCbID9Tem2ukcbnz";
+    const trackId = "4spyMABCbID9Tem2ukcbnz";
+    const spotifyWebUrl = `https://open.spotify.com/track/${trackId}`;
+    const spotifyAppUri = `spotify:track:${trackId}`;
+    const spotifyAndroidIntent = `intent://track/${trackId}#Intent;scheme=spotify;package=com.spotify.music;end`;
 
-    // 1) Try opening the Spotify app directly.
-    window.location.href = spotifyAppUri;
+    const openButton = document.getElementById("open-app");
+    const link = document.getElementById("spotify-link");
 
-    // 2) Fallback to HTTPS (opens Spotify app when available, otherwise web player).
-    setTimeout(() => {
+    let fallbackTimer;
+
+    function fallbackToWeb() {
       window.location.replace(spotifyWebUrl);
-    }, 900);
+    }
 
-    // 3) Attempt to close the browser tab after redirect.
-    setTimeout(() => {
+    function tryCloseTab() {
       window.open("", "_self");
       window.close();
-    }, 1500);
+    }
+
+    function attemptOpen() {
+      const ua = navigator.userAgent || "";
+      const isAndroid = /Android/i.test(ua);
+      const target = isAndroid ? spotifyAndroidIntent : spotifyAppUri;
+
+      // Try opening app URI / Android intent.
+      window.location.href = target;
+
+      // Fallback to Spotify web player if app launch fails.
+      fallbackTimer = setTimeout(fallbackToWeb, 1000);
+
+      // Try closing tab after handoff.
+      setTimeout(tryCloseTab, 1700);
+    }
+
+    // If app opens, page goes hidden: cancel fallback.
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && fallbackTimer) {
+        clearTimeout(fallbackTimer);
+      }
+    });
+
+    openButton.addEventListener("click", attemptOpen);
+    link.setAttribute("href", spotifyWebUrl);
+
+    attemptOpen();
   </script>
  </body>
  </html>
