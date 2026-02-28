@@ -1,13 +1,11 @@
  <!DOCTYPE html>
-<html>
-<html lang="it">
+
+<html lang="en">
  <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; uri=spotify:track:4spyMABCbID9Tem2ukcbnz">
-  <title>Daydream</title>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daydream | Apri Spotify</title>
+  <title>Daydream | Open Spotify</title>
   <style>
     :root {
       color-scheme: dark;
@@ -36,31 +34,27 @@
   </style>
  </head>
  <body>
-  <p>Reindirizzamento a Spotify...</p>
   <main>
-    <h1>Reindirizzamento a Spotify…</h1>
-    <p>Se l'app non si apre automaticamente, usa questo link:</p>
+    <h1>Redirecting to Spotify…</h1>
+    <p>If the app does not open automatically, use this link:</p>
     <p>
-      <a
-        href="https://open.spotify.com/intl-it/track/4spyMABCbID9Tem2ukcbnz?si=89e3fefb0a964f49"
-      >Apri il brano su Spotify</a>
+      <a href="https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz">Open track on Spotify</a>
     </p>
   </main>
 
   <script>
-    const spotifyWebUrl =
-      "https://open.spotify.com/intl-it/track/4spyMABCbID9Tem2ukcbnz?si=89e3fefb0a964f49";
+    const spotifyWebUrl = "https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz";
     const spotifyAppUri = "spotify:track:4spyMABCbID9Tem2ukcbnz";
 
-    // 1) Prova ad aprire direttamente l'app.
+    // 1) Try opening the Spotify app directly.
     window.location.href = spotifyAppUri;
 
-    // 2) Fallback al link https (apre app Spotify se disponibile, altrimenti web).
+    // 2) Fallback to HTTPS (opens Spotify app when available, otherwise web player).
     setTimeout(() => {
       window.location.replace(spotifyWebUrl);
     }, 900);
 
-    // 3) Tentativo di chiusura scheda browser dopo il redirect.
+    // 3) Attempt to close the browser tab after redirect.
     setTimeout(() => {
       window.open("", "_self");
       window.close();
