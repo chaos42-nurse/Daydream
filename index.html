@@ -6,10 +6,8 @@
     const uri = "spotify:track:4spyMABCbID9Tem2ukcbnz";
     const web = "https://open.spotify.com/track/4spyMABCbID9Tem2ukcbnz";
 
-    // Tentativo apertura app Spotify
     window.location.replace(uri);
 
-    // Fallback se l'app non si apre
     setTimeout(function() {
       window.location.replace(web);
     }, 500);
